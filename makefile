@@ -6,7 +6,7 @@ CFLAGS = -Wall
 testsuite: main.o control.o view.o model.o
 	$(CC) $(CFLAGS) main.o control.o view.o model.o -o testsuite
 
-main.o: main.cpp main.h view.h model.h control.h
+main.o: main.cpp view.h model.h control.h main.h
 	$(CC) $(CFLAGS) -c main.cpp
 
 control.o: control.cpp control.h
