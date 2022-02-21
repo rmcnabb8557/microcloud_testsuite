@@ -9,7 +9,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <string.h>
-#include "main.h"
+#include "pipe.h"
 #include "model.h"
 #include "control.h"
 #include "view.h"
@@ -78,5 +78,9 @@ int main(){
 		close(pip2[0]);
 		exit(0);
 	}
+	close(pip1[0]);
+	close(pip2[0]);
+	close(pip1[1]);
+	close(pip2[1]);
     return 0;
 }
