@@ -4,4 +4,4 @@
 *
 */
 
-void viewTest(void);
+void viewTest(int* model);

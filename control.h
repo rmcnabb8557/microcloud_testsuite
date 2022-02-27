@@ -3,4 +3,4 @@
 *   control.h
 *
 */
-void controlTest(void);
+void controlTest(int* model, int* view);

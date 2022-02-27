@@ -3,4 +3,4 @@
 *   model.h
 *
 */
-void modelTest(void);
+void modelTest(int* model);

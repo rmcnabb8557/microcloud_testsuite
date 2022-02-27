@@ -9,7 +9,6 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <string.h>
-#include "globals.h"
 #include "model.h"
 #include "control.h"
 #include "view.h"
@@ -19,13 +18,15 @@
 int main(){
 	int pid[THREE];
 	int tempID;
+	int model[2];
+	int view[2];
 	//For both pipelines, pip[0] is reading end,
 	//and pip[1] is writing end
-	if(pipe(pip1) == -1){
+	if(pipe(model) == -1){
 		printf("\nPipeline Error\n");
 		return 1;
 	}
-	if(pipe(pip2) == -1){
+	if(pipe(view) == -1){
 		printf("\nPipeline Error\n");
 		return 1;
 	}
@@ -44,30 +45,30 @@ int main(){
 	}
 	
 	if(tempID == 1){
-		close(pip1[1]);
-		close(pip2[1]);
-		close(pip2[0]); // modelTest() below here if read only from pip1[0]
-		modelTest();
-		close(pip1[0]);
+		close(model[1]);
+		close(view[1]);
+		close(view[0]); // modelTest() below here if read only from pip1[0]
+		modelTest(model);
+		close(model[0]);
 		exit(0);
 	}else if(tempID == 2){
-		close(pip1[0]);
-		close(pip2[0]); // controlTest() below here if write to both pip1[1] and pip2[1]
-		controlTest();
-		close(pip1[1]);
-		close(pip2[1]);
+		close(model[0]);
+		close(view[0]); // controlTest() below here if write to both pip1[1] and pip2[1]
+		controlTest(model, view);
+		close(model[1]);
+		close(view[1]);
 		exit(0);
 	}else if(tempID == 3){
-		close(pip1[1]);
-		close(pip2[1]);
-		close(pip1[0]); // viewTest() below here if read only from pip2[0]
-		viewTest();
-		close(pip2[0]);
+		close(model[1]);
+		close(view[1]);
+		close(model[0]); // viewTest() below here if read only from pip2[0]
+		viewTest(view);
+		close(view[0]);
 		exit(0);
 	}
-	close(pip1[0]);
-	close(pip2[0]);
-	close(pip1[1]);
-	close(pip2[1]);
+	close(model[0]);
+	close(view[0]);
+	close(model[1]);
+	close(view[1]);
     return 0;
 }

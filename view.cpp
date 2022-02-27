@@ -6,19 +6,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/wait.h>
-#include "globals.h"
 
 struct packet{
 	int ID;
 	char message[100];
-} viewPacket;
-void viewTest(void){
-    printf("View Test Pass! %d\n", getppid());
-    packet viewPacket;
-	int strlimit = 100;
-	char newstr[strlimit];
+};
+
+void viewTest(int* view){
+	packet *viewPacket;
+	viewPacket = (struct packet *) malloc(sizeof(struct packet));
+    	printf("View Test Pass! %d\n", getppid());
 	wait(NULL);
-	read(pip2[0], newstr, strlimit);
-	printf("Received from ControlPipeline: %s\n", newstr);
+	read(view[0], viewPacket, sizeof(*viewPacket));
+	printf("Received from ControlPipeline: %s %d\n", viewPacket->message, viewPacket->ID);
 }
