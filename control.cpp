@@ -20,9 +20,12 @@ void controlTest(int* model, int* view){
 	controlPacket->ID = 0;
 	strcpy(controlPacket->message, "Tester");
 	printf("Control Test Pass! %d\n", getppid());
-	while(1){
+	while(controlPacket->ID < 10){
 		write(model[1], controlPacket, sizeof(*controlPacket));
-		controlPacket->ID = 1;
+		wait(NULL);
+		controlPacket->ID += 1;
 		write(view[1], controlPacket, sizeof(*controlPacket));
+		wait(NULL);
+		controlPacket->ID += 1;
 	}
 }

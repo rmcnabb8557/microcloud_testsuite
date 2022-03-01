@@ -18,7 +18,11 @@ void modelTest(int* model){
 	packet *modelPacket;
 	modelPacket = (struct packet *) malloc(sizeof(struct packet));
     	printf("Model Test Pass! %d\n", getppid());
-	wait(NULL);
-	read(model[0], modelPacket, sizeof(*modelPacket));
-	printf("Received from ControlPipeline: %s %d\n", modelPacket->message, modelPacket->ID);
+	do{
+		wait(NULL);
+		if(!read(model[0], modelPacket, sizeof(*modelPacket))){
+			break;
+		}
+		printf("Model from ControlPipeline: %s %d\n", modelPacket->message, modelPacket->ID);
+	}while(modelPacket->ID < 10);
 }
