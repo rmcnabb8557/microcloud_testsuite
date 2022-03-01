@@ -11,6 +11,7 @@
 
 struct packet{
 	int ID;
+	bool terminate;
 	char message[100];
 };
 
@@ -23,6 +24,10 @@ void modelTest(int* model){
 		if(!read(model[0], modelPacket, sizeof(*modelPacket))){
 			break;
 		}
+		if(modelPacket->terminate){
+			printf("Model Process Terminated\n");
+			break;
+		}
 		printf("Model from ControlPipeline: %s %d\n", modelPacket->message, modelPacket->ID);
-	}while(modelPacket->ID < 10);
+	}while(1);
 }
