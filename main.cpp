@@ -45,24 +45,24 @@ int main(){
 	}
 	
 	if(tempID == 1){
-		close(model[1]);
 		close(view[1]);
-		close(view[0]); // modelTest() below here if read only from pip1[0]
+		close(view[0]); // modelTest()
 		modelTest(model);
 		close(model[0]);
+		close(model[1]);
 		exit(0);
 	}else if(tempID == 2){
 		close(model[0]);
-		close(view[0]); // controlTest() below here if write to both pip1[1] and pip2[1]
+		close(view[0]); // controlTest()
 		controlTest(model, view);
 		close(model[1]);
 		close(view[1]);
 		exit(0);
 	}else if(tempID == 3){
 		close(model[1]);
-		close(view[1]);
-		close(model[0]); // viewTest() below here if read only from pip2[0]
+		close(model[0]); // viewTest()
 		viewTest(view);
+		close(view[1]);
 		close(view[0]);
 		exit(0);
 	}

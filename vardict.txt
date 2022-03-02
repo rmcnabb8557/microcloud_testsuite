@@ -1,9 +1,24 @@
 #
 #
-#	Variable dictionary
+#	*VARIABLE DICTIONARY*
 #
 #
+#	controlPacket, viewPacket, and modelPacket:
+#	are all the same format and size
+#	this is the protocol for sending data across processes
 #
+#	each packet must contain, in this order: 
+#	int ID; //(ID of packet)
+#	bool terminate; //(flag for termination of a process)
+#	char message[100]; //(message to be transferred)
 #
+#	view[size 2] and model[size 2]:
+#	are the pipelines for separate control communication
+# 	with the named module of the pipe
 #
-
+#	pid and tempID:
+#	are both simple setup variables that help the parent 
+#	build the process sisterhood
+#
+#	
+	{all is subject to change}
