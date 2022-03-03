@@ -15,33 +15,29 @@ struct packet{
 	char message[100];
 } *viewPacket;
 
-void vsend(char* message, int *view){
-	viewPacket->ID ++;
-	strcpy(viewPacket->message, message);
-	write(view[1], viewPacket, sizeof(*viewPacket));
-}
-
-packet* vreceive(int *view){
-	packet *tempPacket;
-	tempPacket = (struct packet *) malloc(sizeof(struct packet));
-	while(!read(view[0], tempPacket, sizeof(*tempPacket)));
-	return tempPacket;
-}
-
-void viewTest(int* view){
+void viewTest(int* view, int* vtocontrol){
 	//packet *viewPacket;
 	viewPacket = (struct packet *) malloc(sizeof(struct packet));
-    	//printf("View Test Pass! %d\n", getppid());
-    	char* testMsg = "Test message from View"
+    	printf("View Test Pass! %d\n", getpid());
+    	char* testMsg = "Test message from View";
+    	viewPacket->terminate = false;
 	do{
-		wait(NULL);
-		viewPacket = vreceive(view);
-		if(viewPacket->terminate){
-			printf("View Process Terminated\n");
-			break;
+		while(!read(view[0], viewPacket, sizeof(*viewPacket))){
+			wait(NULL);
 		}
-		printf("View from ControlPipeline: %s %d\n", viewPacket->message, viewPacket->ID);
+		printf("view: %s\n",viewPacket->message);
 		
-		vsend(testMsg, view);
-	}while(1);
+		//vv testsuite logic for view vv
+		
+		
+		viewPacket->ID++;
+		strcpy(viewPacket->message, testMsg);
+		
+		
+		//^^ testsuite logic for model ^^
+		
+		write(vtocontrol[1], viewPacket, sizeof(*viewPacket));
+	}while(!viewPacket->terminate);
+	printf("View Done\n");
+	exit(0);
 }

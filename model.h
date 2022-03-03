@@ -3,5 +3,5 @@
 *   model.h
 *
 */
-void modelTest(int* model);
+void modelTest(int* model, int* mtocontrol);
 

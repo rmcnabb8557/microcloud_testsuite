@@ -19,14 +19,24 @@ int main(){
 	int pid[THREE];
 	int tempID;
 	int model[2];
+	int mtocontrol[2];
 	int view[2];
-	//For both pipelines, pip[0] is reading end,
+	int vtocontrol[2];
+	//For all pipelines, pip[0] is reading end,
 	//and pip[1] is writing end
 	if(pipe(model) == -1){
 		printf("\nPipeline Error\n");
 		return 1;
 	}
+	if(pipe(mtocontrol) == -1){
+		printf("\nPipeline Error\n");
+		return 1;
+	}
 	if(pipe(view) == -1){
+		printf("\nPipeline Error\n");
+		return 1;
+	}
+	if(pipe(vtocontrol) == -1){
 		printf("\nPipeline Error\n");
 		return 1;
 	}
@@ -41,34 +51,58 @@ int main(){
 		tempID = 0;
 		wait(NULL);
 		printf("Parent done\n");
+		close(model[0]);
+		close(view[0]);
+		close(model[1]);
+		close(view[1]);
+		close(mtocontrol[0]);
+		close(vtocontrol[0]);
+		close(mtocontrol[1]);
+		close(vtocontrol[1]);
 		return 0;
 	}
 	
 	if(tempID == 1){
 		close(view[1]);
-		close(view[0]); // modelTest()
-		modelTest(model);
-		close(model[0]);
+		close(view[0]); 
+		close(vtocontrol[0]);
+		close(vtocontrol[1]);
 		close(model[1]);
+		close(mtocontrol[0]);
+		modelTest(model, mtocontrol); // modelTest()
+		close(model[0]);
+		close(mtocontrol[1]);
 		exit(0);
 	}else if(tempID == 2){
 		close(model[0]);
-		close(view[0]); // controlTest()
-		controlTest(model, view);
+		close(view[0]); 
+		close(vtocontrol[1]);
+		close(mtocontrol[1]);
+		controlTest(model, view, vtocontrol, mtocontrol); // controlTest()
+		close(vtocontrol[0]);
+		close(mtocontrol[0]);
 		close(model[1]);
 		close(view[1]);
 		exit(0);
 	}else if(tempID == 3){
 		close(model[1]);
-		close(model[0]); // viewTest()
-		viewTest(view);
+		close(model[0]); 
 		close(view[1]);
+		close(vtocontrol[0]);
+		close(mtocontrol[0]);
+		close(mtocontrol[1]);
+		viewTest(view, vtocontrol);// viewTest()
 		close(view[0]);
+		close(vtocontrol[1]);
 		exit(0);
 	}
 	close(model[0]);
 	close(view[0]);
 	close(model[1]);
 	close(view[1]);
+	close(mtocontrol[0]);
+	close(vtocontrol[0]);
+	close(mtocontrol[1]);
+	close(vtocontrol[1]);
     return 0;
 }

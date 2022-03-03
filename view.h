@@ -4,5 +4,5 @@
 *
 */
 
-void viewTest(int* model);
+void viewTest(int* view, int* vtocontrol);
 

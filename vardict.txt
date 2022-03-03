@@ -13,12 +13,16 @@
 #	char message[100]; //(message to be transferred)
 #
 #	view[size 2] and model[size 2]:
-#	are the pipelines for separate control communication
+#	are the pipelines for RECEIVING control communication
 # 	with the named module of the pipe
 #
+#	vtocontrol[size 2] and mtocontrol[size 2]:
+#	are the pipelines for SENDING control communication
+# 	from the named module of the pipe
+
 #	pid and tempID:
 #	are both simple setup variables that help the parent 
 #	build the process sisterhood
 #
 #	
-	{all is subject to change}
+#	{all is subject to change}

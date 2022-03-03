@@ -15,33 +15,29 @@ struct packet{
 	char message[100];
 } *modelPacket;
 
-void msend(char* message, int *model){
-	modelPacket->ID ++;
-	strcpy(modelPacket->message, message);
-	write(model[1], modelPacket, sizeof(*modelPacket));
-}
-
-packet* mreceive(int *model){
-	packet *tempPacket;
-	tempPacket = (struct packet *) malloc(sizeof(struct packet));
-	while(!read(model[0], tempPacket, sizeof(*tempPacket)));
-	return tempPacket;
-}
-
-void modelTest(int* model){
+void modelTest(int* model, int* mtocontrol){
 	//packet *modelPacket;
 	modelPacket = (struct packet *) malloc(sizeof(struct packet));
-    	//printf("Model Test Pass! %d\n", getppid());
+    	printf("Model Test Pass! %d\n", getpid());
     	char* testMsg = "Test message from Model";
+    	modelPacket->terminate = false;
 	do{
-		wait(NULL);
-		modelPacket = mreceive(model);
-		if(modelPacket->terminate){
-			printf("Model Process Terminated\n");
-			break;
+		while(!read(model[0], modelPacket, sizeof(*modelPacket))){
+			wait(NULL);
 		}
-		printf("Model from ControlPipeline: %s %d\n", modelPacket->message, modelPacket->ID);
+		printf("model: %s\n",modelPacket->message);
 		
-		msend(testMsg, model);
-	}while(1);
+		//vv testsuite logic for model vv
+		
+		
+		modelPacket->ID++;
+		strcpy(modelPacket->message, testMsg);
+		
+		
+		//^^ testsuite logic for model ^^
+		
+		write(mtocontrol[1], modelPacket, sizeof(*modelPacket));
+	}while(!modelPacket->terminate);
+	printf("Model Done\n");
+	exit(0);
 }
