@@ -5,3 +5,5 @@ Don't touch anything, these things are sensitive, currently the system creates 3
 Eventually I want it to act as such:
 #   view<->control<->model
 Where view connects to GUI which is created by teammate, and model connects to node_web which is created by @szechu4n
+
+this is also a test line to test the jira connection
